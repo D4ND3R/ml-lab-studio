@@ -169,7 +169,7 @@ Windows and macOS packaging require Rust and each platform's native build toolch
 Production installers are built by GitHub Actions instead of being committed to git.
 
 - Every push to `master` uploads downloadable workflow artifacts for Windows and macOS.
-- Version tags like `v0.1.0` publish a GitHub Release with installer assets.
+- Version tags like `v0.1.1` publish a GitHub Release with installer assets.
 - Windows releases include the NSIS installer plus the built `.exe`.
 - macOS releases include the `.app` bundle and `.dmg` installer.
 

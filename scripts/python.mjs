@@ -9,9 +9,9 @@ if (process.env.PYTHON) {
 }
 
 if (process.platform === "win32") {
-  candidates.push({ command: "py", args: ["-3"] });
   candidates.push({ command: "python", args: [] });
   candidates.push({ command: "python3", args: [] });
+  candidates.push({ command: "py", args: ["-3"] });
 } else {
   candidates.push({ command: "python3", args: [] });
   candidates.push({ command: "python", args: [] });
