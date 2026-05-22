@@ -164,6 +164,15 @@ npm run tauri build
 
 Windows and macOS packaging require Rust and each platform's native build toolchain. The Tauri shell includes the backend and sample project as bundle resources and attempts to launch the Python backend locally on startup when a backend is not already running.
 
+## Downloading Installers
+
+Production installers are built by GitHub Actions instead of being committed to git.
+
+- Every push to `master` uploads downloadable workflow artifacts for Windows and macOS.
+- Version tags like `v0.1.0` publish a GitHub Release with installer assets.
+- Windows releases include the NSIS installer plus the built `.exe`.
+- macOS releases include the `.app` bundle and `.dmg` installer.
+
 ## Current MVP Features
 
 - Tauri v2-ready desktop scaffold
