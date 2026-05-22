@@ -47,6 +47,12 @@ npm install
 python -m pip install -r backend/requirements.txt
 ```
 
+For backend tests, install the development requirements:
+
+```bash
+python -m pip install -r backend/requirements-dev.txt
+```
+
 PyTorch is optional and intentionally not installed by default:
 
 ```bash
@@ -131,6 +137,8 @@ Backend-only, useful for API development:
 ```bash
 npm run backend
 ```
+
+The npm backend scripts automatically try `python3`, `python`, and the Windows `py -3` launcher. You can set `PYTHON=/path/to/python` to force a specific interpreter.
 
 `web:dev` exists only as a low-level frontend debug command. The intended MVP workflow is the Tauri desktop app.
 

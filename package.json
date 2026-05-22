@@ -10,11 +10,11 @@
     "dev:frontend": "vite",
     "dev:stack": "concurrently -k -n backend,frontend -c cyan,green \"npm run backend\" \"npm run dev:frontend\"",
     "web:dev": "vite",
-    "backend": "python -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8765 --reload",
+    "backend": "node scripts/python.mjs -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8765 --reload",
     "tauri": "tauri",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test:backend": "python -m pytest backend/tests",
+    "test:backend": "node scripts/python.mjs -m pytest backend/tests",
     "test:frontend": "tsc --noEmit && vite build"
   },
   "dependencies": {

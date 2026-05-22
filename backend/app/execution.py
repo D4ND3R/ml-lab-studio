@@ -4,6 +4,7 @@ import ast
 import base64
 import io
 import json
+import sys
 import time
 import traceback
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
@@ -70,10 +71,10 @@ def serialize_value(value: Any) -> dict[str, Any] | None:
 
 def capture_matplotlib_figures() -> list[dict[str, Any]]:
     outputs: list[dict[str, Any]] = []
-    try:
-        import matplotlib
+    if "matplotlib.pyplot" not in sys.modules:
+        return outputs
 
-        matplotlib.use("Agg")
+    try:
         import matplotlib.pyplot as plt
     except Exception:
         return outputs
