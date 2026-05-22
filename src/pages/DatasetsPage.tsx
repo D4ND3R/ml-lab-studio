@@ -48,7 +48,35 @@ export function DatasetsPage({ datasets, activeDataset, onSelect, onImport, onLo
             </button>
           </div>
         </div>
-        {activeDataset ? <DatasetGrid key={activeDataset.id} dataset={activeDataset} onSave={onSaveRows} /> : <p className="empty-note">Import a CSV or open the Iris demo to start editing.</p>}
+        {activeDataset ? (
+          <>
+            <div className="dataset-spotlight">
+              <div>
+                <span>Rows</span>
+                <strong>{activeDataset.rows.toLocaleString()}</strong>
+              </div>
+              <div>
+                <span>Columns</span>
+                <strong>{activeDataset.columns.length}</strong>
+              </div>
+              <div>
+                <span>Missing cells</span>
+                <strong>{activeDataset.missing.reduce((sum, item) => sum + item.missing, 0).toLocaleString()}</strong>
+              </div>
+              <div>
+                <span>Duplicates</span>
+                <strong>{activeDataset.duplicate_rows}</strong>
+              </div>
+            </div>
+            <DatasetGrid key={activeDataset.id} dataset={activeDataset} onSave={onSaveRows} />
+          </>
+        ) : (
+          <div className="empty-state">
+            <TableProperties size={38} aria-hidden="true" />
+            <strong>No dataset loaded</strong>
+            <span>Open the Iris demo or import CSV, TSV, JSON, JSONL, Excel, Parquet, Feather, SQLite tables, or image folders.</span>
+          </div>
+        )}
       </section>
 
       <section className="panel">

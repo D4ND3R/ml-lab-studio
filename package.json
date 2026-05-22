@@ -4,7 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "tauri dev",
+    "desktop": "tauri dev",
+    "desktop:build": "tauri build",
+    "dev:frontend": "vite",
+    "dev:stack": "concurrently -k -n backend,frontend -c cyan,green \"npm run backend\" \"npm run dev:frontend\"",
+    "web:dev": "vite",
     "backend": "python -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8765 --reload",
     "tauri": "tauri",
     "build": "tsc --noEmit && vite build",
@@ -29,6 +34,7 @@
     "@types/node": "^22.10.2",
     "@types/react": "^18.3.17",
     "@types/react-dom": "^18.3.5",
+    "concurrently": "^9.2.1",
     "typescript": "^5.7.2",
     "vite": "^6.0.3"
   }

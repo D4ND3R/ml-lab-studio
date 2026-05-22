@@ -30,7 +30,10 @@ body {
   margin: 0;
   min-width: 1060px;
   min-height: 100vh;
-  background: var(--bg);
+  background:
+    linear-gradient(135deg, rgba(69, 184, 172, 0.08), transparent 32%),
+    linear-gradient(225deg, rgba(242, 184, 75, 0.06), transparent 28%),
+    var(--bg);
 }
 
 button,
@@ -188,6 +191,9 @@ h3 {
   grid-template-rows: 70px auto 1fr;
   min-width: 0;
   overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 210px),
+    #101216;
 }
 
 .topbar {
@@ -263,6 +269,11 @@ h3 {
   border-color: rgba(138, 180, 248, 0.45);
 }
 
+.status-pill.desktop {
+  color: #d8c4ff;
+  border-color: rgba(181, 151, 255, 0.45);
+}
+
 .primary-button {
   background: #1f6f68;
   border-color: #2d9a91;
@@ -327,11 +338,14 @@ main {
 }
 
 .panel {
-  background: var(--surface);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 120px),
+    var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 14px;
   min-width: 0;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.18);
 }
 
 .panel-title {
@@ -417,6 +431,158 @@ label {
   color: #c7f0ea;
 }
 
+.desktop-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(360px, 0.9fr);
+  gap: 18px;
+  min-height: 260px;
+  border: 1px solid rgba(138, 180, 248, 0.28);
+  border-radius: var(--radius);
+  padding: 20px;
+  background:
+    linear-gradient(135deg, rgba(69, 184, 172, 0.18), rgba(138, 180, 248, 0.08) 42%, rgba(242, 184, 75, 0.11)),
+    #151922;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+}
+
+.hero-copy {
+  display: grid;
+  align-content: center;
+  gap: 14px;
+}
+
+.hero-copy h1 {
+  font-size: 34px;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.hero-copy p {
+  max-width: 780px;
+  margin: 0;
+  color: #cfd6e3;
+  line-height: 1.55;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  border: 1px solid rgba(216, 196, 255, 0.35);
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: #d8c4ff;
+  background: rgba(15, 18, 24, 0.5);
+  font-size: 12px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hero-meter {
+  display: grid;
+  align-content: center;
+  gap: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius);
+  padding: 14px;
+  background: rgba(15, 18, 24, 0.58);
+}
+
+.workflow-rail {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.workflow-step {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 6px;
+  min-height: 76px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #11141a;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.workflow-step.active {
+  color: #eefcf9;
+  border-color: rgba(69, 184, 172, 0.55);
+  background: rgba(69, 184, 172, 0.14);
+}
+
+.action-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.action-grid button {
+  min-height: 58px;
+  justify-content: flex-start;
+  background: #121923;
+}
+
+.assistant-panel {
+  display: grid;
+  gap: 10px;
+}
+
+.assistant-card {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #11141a;
+}
+
+.assistant-card.info {
+  border-color: rgba(138, 180, 248, 0.26);
+}
+
+.assistant-card.warning {
+  border-color: rgba(242, 184, 75, 0.38);
+}
+
+.assistant-card.success {
+  border-color: rgba(105, 199, 121, 0.32);
+}
+
+.assistant-card svg {
+  margin-top: 2px;
+}
+
+.assistant-card.info svg {
+  color: var(--focus);
+}
+
+.assistant-card.warning svg {
+  color: var(--accent-2);
+}
+
+.assistant-card.success svg {
+  color: var(--ok);
+}
+
+.assistant-card strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.assistant-card p {
+  margin: 0 0 8px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
 .project-list,
 .dataset-list,
 .template-list,
@@ -475,6 +641,57 @@ label {
 .data-grid-shell {
   display: grid;
   gap: 10px;
+}
+
+.dataset-spotlight {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.dataset-spotlight div {
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background:
+    linear-gradient(180deg, rgba(69, 184, 172, 0.08), transparent),
+    #12151b;
+}
+
+.dataset-spotlight span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.dataset-spotlight strong {
+  font-size: 21px;
+}
+
+.empty-state {
+  min-height: 320px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 10px;
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: #11141a;
+  color: var(--muted);
+  padding: 24px;
+}
+
+.empty-state strong {
+  color: var(--text);
+  font-size: 18px;
+}
+
+.empty-state span {
+  max-width: 560px;
+  line-height: 1.45;
 }
 
 .compact-toolbar {
@@ -986,6 +1203,15 @@ label {
 
   .form-grid.six,
   .form-grid.four {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .desktop-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .workflow-rail,
+  .dataset-spotlight {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

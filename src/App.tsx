@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { BackendClient } from "./lib/api";
+import { buildAssistantSuggestions } from "./lib/assistant";
 import { defaultArchitecture } from "./lib/deepLearningStore";
 import { getActiveProject, loadProjects, setActiveProject } from "./lib/projectStore";
 import { irisCsv } from "./lib/sampleData";
@@ -63,6 +64,10 @@ export default function App() {
   const [commandOpen, setCommandOpen] = useState(false);
 
   const activeDataset = useMemo(() => datasets.find((dataset) => dataset.id === activeDatasetId) ?? datasets[0] ?? null, [activeDatasetId, datasets]);
+  const assistantSuggestions = useMemo(
+    () => buildAssistantSuggestions(activeDataset, architecture, trainingResult),
+    [activeDataset, architecture, trainingResult]
+  );
 
   useEffect(() => {
     sessionIdRef.current = sessionId;
@@ -360,7 +365,24 @@ export default function App() {
 
   let page: JSX.Element;
   if (activeSection === "projects") {
-    page = <ProjectsPage project={project} recent={recentProjects} onCreate={createDemoProject} onActivate={(next) => { setProject(next); setActiveProject(next); }} onSave={saveProjectMetadata} />;
+    page = (
+      <ProjectsPage
+        project={project}
+        recent={recentProjects}
+        datasetCount={datasets.length}
+        modelCount={models.length}
+        runCount={runs.length}
+        suggestions={assistantSuggestions}
+        onCreate={createDemoProject}
+        onActivate={(next) => {
+          setProject(next);
+          setActiveProject(next);
+        }}
+        onSave={saveProjectMetadata}
+        onNavigate={setActiveSection}
+        onLoadSample={loadSampleDataset}
+      />
+    );
   } else if (activeSection === "datasets") {
     page = <DatasetsPage datasets={datasets} activeDataset={activeDataset} onSelect={setActiveDatasetId} onImport={importDataset} onLoadSample={loadSampleDataset} onSaveRows={saveDatasetRows} onExport={exportDataset} />;
   } else if (activeSection === "explorer") {

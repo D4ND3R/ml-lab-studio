@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "identifier": "com.mllabstudio.app",
   "build": {
-    "beforeDevCommand": "npm run dev",
+    "beforeDevCommand": "npm run dev:stack",
     "beforeBuildCommand": "npm run build",
     "devUrl": "http://127.0.0.1:5173",
     "frontendDist": "../dist"
@@ -28,6 +28,10 @@
     "active": true,
     "targets": "all",
     "category": "DeveloperTool",
+    "resources": [
+      "../backend",
+      "../sample_project"
+    ],
     "shortDescription": "Desktop lab for machine learning and deep learning experiments",
     "longDescription": "ML Lab Studio combines dataset editing, notebooks, model visualization, and experiment tracking in a Tauri desktop app."
   }

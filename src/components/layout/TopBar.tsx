@@ -1,4 +1,4 @@
-import { Command, HardDrive, Play, Save, Server, Zap } from "lucide-react";
+import { Command, HardDrive, Monitor, Play, Save, Server, Zap } from "lucide-react";
 
 import type { BackendHealth, DeviceStatus, ProjectRecord } from "../../lib/types";
 
@@ -22,6 +22,10 @@ export function TopBar({ project, health, device, busy, onSave, onCommand }: Pro
         </div>
       </div>
       <div className="status-strip">
+        <span className="status-pill desktop">
+          <Monitor size={14} aria-hidden="true" />
+          Desktop app
+        </span>
         <span className={busy ? "status-pill active" : "status-pill"}>
           <Play size={14} aria-hidden="true" />
           {busy ? "Running" : "Idle"}

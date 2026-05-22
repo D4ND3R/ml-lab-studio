@@ -62,23 +62,21 @@ Install:
 - Rust stable, required for Tauri desktop builds
 - Microsoft Visual Studio Build Tools with C++ workload
 
-Run the backend:
-
-```bash
-npm run backend
-```
-
-Run the frontend:
+Run the desktop app:
 
 ```bash
 npm run dev
 ```
 
-Run the desktop shell:
+or:
 
 ```bash
-npm run tauri dev
+npm run desktop
 ```
+
+`npm run tauri dev` is also available if you want to call the Tauri CLI wrapper directly.
+
+These commands open the Tauri desktop window. Vite is used internally by Tauri during development, but the primary app experience is not the browser.
 
 ## Development on macOS
 
@@ -89,13 +87,13 @@ Install:
 - Rust stable
 - Xcode command line tools
 
-Run:
+Run the desktop app:
 
 ```bash
-npm run backend
 npm run dev
-npm run tauri dev
 ```
+
+This starts the local Python backend and the Tauri desktop window through the configured development stack.
 
 On Apple Silicon, PyTorch can use MPS when your installed PyTorch build supports it.
 
@@ -114,26 +112,27 @@ Health check:
 curl http://127.0.0.1:8765/health
 ```
 
-## Running the App
+## Running the Desktop App
 
-Use two terminals for MVP development:
+Desktop-first development:
 
 ```bash
-npm run backend
 npm run dev
 ```
 
-Then open the Vite URL, usually:
-
-```text
-http://127.0.0.1:5173
-```
-
-For Tauri:
+Equivalent explicit command:
 
 ```bash
-npm run tauri dev
+npm run desktop
 ```
+
+Backend-only, useful for API development:
+
+```bash
+npm run backend
+```
+
+`web:dev` exists only as a low-level frontend debug command. The intended MVP workflow is the Tauri desktop app.
 
 ## Building the App
 
@@ -146,10 +145,16 @@ npm run build
 Desktop packaging:
 
 ```bash
+npm run desktop:build
+```
+
+or:
+
+```bash
 npm run tauri build
 ```
 
-Windows and macOS packaging require Rust and each platform's native build toolchain.
+Windows and macOS packaging require Rust and each platform's native build toolchain. The Tauri shell includes the backend and sample project as bundle resources and attempts to launch the Python backend locally on startup when a backend is not already running.
 
 ## Current MVP Features
 
@@ -189,22 +194,21 @@ Windows and macOS packaging require Rust and each platform's native build toolch
 
 ## Initial Sample Workflow
 
-1. Start the backend with `npm run backend`.
-2. Start the frontend with `npm run dev` or `npm run tauri dev`.
-3. Open Projects and create the Iris demo project.
-4. Open Datasets and click Open Iris demo.
-5. Open Data Explorer and plot `sepal_length` versus `sepal_width`, colored by `species`.
-6. Open Notebook Lab and run the Iris LogisticRegression notebook.
-7. Use the Decision Boundary panel with model variable `model`.
-8. Open Deep Learning Studio.
-9. Use the Builder to inspect or edit the Iris MLP.
-10. Generate PyTorch code and insert it into Notebook Lab.
-11. If PyTorch is installed, train the MLP and inspect training curves, confusion matrix, and weights.
-12. Save the trained model from the Models page.
+1. Start the desktop app with `npm run dev`.
+2. Open Projects and create the Iris demo project.
+3. Open Datasets and click Open Iris demo.
+4. Open Data Explorer and plot `sepal_length` versus `sepal_width`, colored by `species`.
+5. Open Notebook Lab and run the Iris LogisticRegression notebook.
+6. Use the Decision Boundary panel with model variable `model`.
+7. Open Deep Learning Studio.
+8. Use the Builder to inspect or edit the Iris MLP.
+9. Generate PyTorch code and insert it into Notebook Lab.
+10. If PyTorch is installed, train the MLP and inspect training curves, confusion matrix, and weights.
+11. Save the trained model from the Models page.
 
 ## Roadmap
 
-- Real Tauri-managed Python sidecar lifecycle
+- Fully bundled Python sidecar executable for release builds
 - File-system project open/save through Tauri plugins
 - DuckDB/SQLite persistence for metadata, notebooks, runs, and model cards
 - Large dataset virtualization and streaming previews
@@ -233,7 +237,8 @@ Windows and macOS packaging require Rust and each platform's native build toolch
 
 - Notebook execution uses trusted local `exec` in an isolated namespace, not a hardened sandbox.
 - Timeout protection reports long-running cells but cannot always kill a running Python thread immediately.
-- The Tauri app is scaffolded for v2, but this MVP starts the Python backend manually with `npm run backend`.
+- Development runs through the Tauri desktop window. The Rust shell tries to launch the backend if Python is installed, and the dev stack also starts it automatically.
+- Release builds still require a compatible local Python runtime until the backend is frozen into platform-specific sidecar executables.
 - Torch is optional; deep learning training is disabled until PyTorch is installed.
 - SQLite table import and image folder import are implemented backend capabilities but need fuller UI file/folder pickers.
 - Frontend persistence is localStorage-first until Tauri filesystem plugins are added.
