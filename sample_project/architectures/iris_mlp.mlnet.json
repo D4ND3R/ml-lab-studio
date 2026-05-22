@@ -1,0 +1,17 @@
+{
+  "name": "Iris MLP",
+  "inputSize": 4,
+  "outputSize": 3,
+  "layers": [
+    { "id": "dense-1", "type": "linear", "units": 12, "label": "Dense 12" },
+    { "id": "relu-1", "type": "relu", "label": "ReLU" },
+    { "id": "dropout-1", "type": "dropout", "rate": 0.1, "label": "Dropout" },
+    { "id": "dense-out", "type": "linear", "units": 3, "label": "Output 3" }
+  ],
+  "loss": "CrossEntropyLoss",
+  "optimizer": "Adam",
+  "learningRate": 0.01,
+  "batchSize": 16,
+  "epochs": 25,
+  "validationSplit": 0.2
+}

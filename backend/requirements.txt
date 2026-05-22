@@ -1,0 +1,22 @@
+fastapi
+uvicorn
+pydantic
+pandas
+numpy
+scikit-learn
+matplotlib
+plotly
+joblib
+duckdb
+pyarrow
+openpyxl
+python-multipart
+httpx
+
+# Optional extras. Install only when your platform supports them well.
+# torch
+# torchvision
+# torchaudio
+# seaborn
+# xgboost
+# lightgbm

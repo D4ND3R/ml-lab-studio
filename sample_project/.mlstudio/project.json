@@ -1,0 +1,10 @@
+{
+  "name": "Iris Demo Project",
+  "version": "0.1.0",
+  "created_at": "2026-05-22T00:00:00Z",
+  "updated_at": "2026-05-22T00:00:00Z",
+  "settings": {
+    "trusted_local_code": true,
+    "default_backend_url": "http://127.0.0.1:8765"
+  }
+}

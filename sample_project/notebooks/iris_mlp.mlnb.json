@@ -1,0 +1,20 @@
+{
+  "name": "iris_mlp.mlnb.json",
+  "version": "0.1.0",
+  "createdAt": "2026-05-22T00:00:00Z",
+  "updatedAt": "2026-05-22T00:00:00Z",
+  "cells": [
+    {
+      "id": "intro",
+      "kind": "markdown",
+      "source": "# Iris MLP\nGenerate similar code from Deep Learning Studio, or run this if PyTorch is installed.",
+      "outputs": []
+    },
+    {
+      "id": "torch-mlp",
+      "kind": "code",
+      "source": "import pandas as pd\nimport torch\nfrom torch import nn\nfrom sklearn.preprocessing import LabelEncoder, StandardScaler\nfrom sklearn.model_selection import train_test_split\n\niris = pd.read_csv(\"sample_project/datasets/iris.csv\")\nX = iris[[\"sepal_length\", \"sepal_width\", \"petal_length\", \"petal_width\"]].values\ny = LabelEncoder().fit_transform(iris[\"species\"])\nX = StandardScaler().fit_transform(X).astype(\"float32\")\nX_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42, stratify=y)\n\niris_mlp = nn.Sequential(nn.Linear(4, 12), nn.ReLU(), nn.Dropout(0.1), nn.Linear(12, 3))\niris_mlp",
+      "outputs": []
+    }
+  ]
+}

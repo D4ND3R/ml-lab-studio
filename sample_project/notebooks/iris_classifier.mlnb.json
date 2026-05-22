@@ -1,0 +1,20 @@
+{
+  "name": "iris_classifier.mlnb.json",
+  "version": "0.1.0",
+  "createdAt": "2026-05-22T00:00:00Z",
+  "updatedAt": "2026-05-22T00:00:00Z",
+  "cells": [
+    {
+      "id": "intro",
+      "kind": "markdown",
+      "source": "# Iris LogisticRegression classifier\nRun the code cell to train a two-feature classifier for decision-boundary visualization.",
+      "outputs": []
+    },
+    {
+      "id": "train-logistic",
+      "kind": "code",
+      "source": "import pandas as pd\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import classification_report, confusion_matrix\n\n# Backend runs from the repo root when started with npm run backend.\ndf = pd.read_csv(\"sample_project/datasets/iris.csv\")\nfeatures = [\"sepal_length\", \"sepal_width\"]\ntarget = \"species\"\nX_train, X_test, y_train, y_test = train_test_split(\n    df[features], df[target], test_size=0.25, random_state=42, stratify=df[target]\n)\nmodel = LogisticRegression(max_iter=500)\nmodel.fit(X_train, y_train)\npredictions = model.predict(X_test)\nprint(classification_report(y_test, predictions))\nconfusion_matrix(y_test, predictions)",
+      "outputs": []
+    }
+  ]
+}
