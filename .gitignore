@@ -2,6 +2,7 @@ node_modules/
 dist/
 dist-ssr/
 .vite/
+build/
 .env
 .env.*
 !.env.example
@@ -18,6 +19,8 @@ htmlcov/
 .venv/
 venv/
 .mlstudio_runtime/
+sidecars/*
+!sidecars/.gitkeep
 
 sample_project/models/*.joblib
 sample_project/models/*.pkl

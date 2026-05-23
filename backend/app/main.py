@@ -32,7 +32,7 @@ from .storage import ensure_project, new_id
 
 app = FastAPI(
     title="ML Lab Studio Backend",
-    version="0.1.0",
+    version="0.1.2",
     description="Local trusted FastAPI sidecar for ML Lab Studio notebook execution, datasets, models, and visualization.",
 )
 
@@ -63,7 +63,7 @@ def health() -> dict[str, Any]:
     return {
         "ok": True,
         "name": "ML Lab Studio Backend",
-        "version": "0.1.0",
+        "version": "0.1.2",
         "trusted_local_code": True,
         "warning": "Notebook code runs locally in a trusted Python session. Do not run untrusted code.",
         "torch": torch_status(),

@@ -8,9 +8,10 @@ type Props = {
   variables: VariableInfo[];
   onRefresh: () => void;
   onSaveModel: (modelName: string) => void;
+  onDeleteModel: (modelId: string) => void;
 };
 
-export function ModelsPage({ models, variables, onRefresh, onSaveModel }: Props) {
+export function ModelsPage({ models, variables, onRefresh, onSaveModel, onDeleteModel }: Props) {
   const [modelName, setModelName] = useState("model");
   const modelVariables = variables.filter((variable) => variable.capabilities.includes("predict") || variable.capabilities.includes("torch_module"));
   return (
@@ -64,7 +65,7 @@ export function ModelsPage({ models, variables, onRefresh, onSaveModel }: Props)
                 </div>
               </dl>
               <small>{model.path}</small>
-              <button className="icon-button small" title="Delete model card">
+              <button className="icon-button small" title="Delete model card" onClick={() => onDeleteModel(model.id)}>
                 <Trash2 size={14} aria-hidden="true" />
               </button>
             </article>

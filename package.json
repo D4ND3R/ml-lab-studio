@@ -1,6 +1,6 @@
 {
   "name": "ml-lab-studio",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,6 +11,7 @@
     "dev:stack": "concurrently -k -n backend,frontend -c cyan,green \"npm run backend\" \"npm run dev:frontend\"",
     "web:dev": "vite",
     "backend": "node scripts/python.mjs -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8765 --reload",
+    "backend:bundle": "node scripts/build-backend-sidecar.mjs",
     "tauri": "tauri",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",

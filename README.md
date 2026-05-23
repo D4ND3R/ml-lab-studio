@@ -53,6 +53,13 @@ For backend tests, install the development requirements:
 python -m pip install -r backend/requirements-dev.txt
 ```
 
+Release builds use a bundled backend executable. To create that sidecar locally before packaging:
+
+```bash
+python -m pip install -r backend/requirements-bundle.txt
+npm run backend:bundle
+```
+
 PyTorch is optional and intentionally not installed by default:
 
 ```bash
@@ -162,14 +169,14 @@ or:
 npm run tauri build
 ```
 
-Windows and macOS packaging require Rust and each platform's native build toolchain. The Tauri shell includes the backend and sample project as bundle resources and attempts to launch the Python backend locally on startup when a backend is not already running.
+Windows and macOS packaging require Rust and each platform's native build toolchain. Release packaging builds a platform-specific backend sidecar first, bundles it with the app, and starts it automatically when a backend is not already running.
 
 ## Downloading Installers
 
 Production installers are built by GitHub Actions instead of being committed to git.
 
 - Every push to `master` uploads downloadable workflow artifacts for Windows and macOS.
-- Version tags like `v0.1.1` publish a GitHub Release with installer assets.
+- Version tags like `v0.1.2` publish a GitHub Release with installer assets.
 - Windows releases include the NSIS installer plus the built `.exe`.
 - macOS releases include the `.app` bundle and `.dmg` installer.
 
@@ -225,7 +232,6 @@ Production installers are built by GitHub Actions instead of being committed to 
 
 ## Roadmap
 
-- Fully bundled Python sidecar executable for release builds
 - File-system project open/save through Tauri plugins
 - DuckDB/SQLite persistence for metadata, notebooks, runs, and model cards
 - Large dataset virtualization and streaming previews
@@ -254,8 +260,8 @@ Production installers are built by GitHub Actions instead of being committed to 
 
 - Notebook execution uses trusted local `exec` in an isolated namespace, not a hardened sandbox.
 - Timeout protection reports long-running cells but cannot always kill a running Python thread immediately.
-- Development runs through the Tauri desktop window. The Rust shell tries to launch the backend if Python is installed, and the dev stack also starts it automatically.
-- Release builds still require a compatible local Python runtime until the backend is frozen into platform-specific sidecar executables.
+- Development runs through the Tauri desktop window. The dev stack starts the Python backend, and the Rust shell can also fall back to a local Python runtime.
+- Release builds bundle a backend sidecar executable. Backend logs are written to the app log directory as `backend.log`, and runtime data is stored in the app data directory.
 - Torch is optional; deep learning training is disabled until PyTorch is installed.
 - SQLite table import and image folder import are implemented backend capabilities but need fuller UI file/folder pickers.
 - Frontend persistence is localStorage-first until Tauri filesystem plugins are added.

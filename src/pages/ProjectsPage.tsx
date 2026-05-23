@@ -1,4 +1,4 @@
-import { BarChart3, BrainCircuit, Database, FolderOpen, NotebookTabs, Plus, Save, Sparkles, Workflow } from "lucide-react";
+import { BarChart3, BrainCircuit, Database, FolderOpen, NotebookTabs, Plus, Save, Workflow } from "lucide-react";
 
 import { MLAssistantPanel } from "../components/assistant/MLAssistantPanel";
 import { WorkflowRail } from "../components/layout/WorkflowRail";
@@ -35,32 +35,30 @@ export function ProjectsPage({
 }: Props) {
   return (
     <div className="page-grid">
-      <section className="desktop-hero span-3">
-        <div className="hero-copy">
-          <span className="eyebrow">
-            <Sparkles size={15} aria-hidden="true" />
-            Desktop ML workspace
-          </span>
-          <h1>{project.name}</h1>
-          <p>
-            Build datasets, notebooks, neural networks, visualizations, model cards, and experiment runs from one local Windows/macOS app.
-          </p>
-          <div className="hero-actions">
-            <button className="primary-button" onClick={onLoadSample}>
-              <Database size={16} aria-hidden="true" />
-              Load Iris workflow
-            </button>
-            <button onClick={() => onNavigate("notebooks")}>
-              <NotebookTabs size={16} aria-hidden="true" />
-              Open Notebook Lab
-            </button>
-            <button onClick={() => onNavigate("deep-learning")}>
-              <BrainCircuit size={16} aria-hidden="true" />
-              Open Deep Learning Studio
-            </button>
+      <section className="workspace-overview span-3">
+        <div className="overview-title">
+          <FolderOpen size={24} aria-hidden="true" />
+          <div>
+            <span className="muted">Active workspace</span>
+            <h1>{project.name}</h1>
+            <p className="small">{project.path}</p>
           </div>
         </div>
-        <div className="hero-meter">
+        <div className="overview-actions">
+          <button className="primary-button" onClick={onLoadSample}>
+            <Database size={16} aria-hidden="true" />
+            Load Iris workflow
+          </button>
+          <button onClick={() => onNavigate("notebooks")}>
+            <NotebookTabs size={16} aria-hidden="true" />
+            Notebook
+          </button>
+          <button onClick={() => onNavigate("deep-learning")}>
+            <BrainCircuit size={16} aria-hidden="true" />
+            Neural net
+          </button>
+        </div>
+        <div className="overview-meter">
           <WorkflowRail datasetCount={datasetCount} modelCount={modelCount} runCount={runCount} />
           <dl className="metric-grid wide">
             <div>
@@ -76,8 +74,8 @@ export function ProjectsPage({
               <dd>{runCount}</dd>
             </div>
             <div>
-              <dt>Target</dt>
-              <dd>Desktop</dd>
+              <dt>Build</dt>
+              <dd>0.1.2</dd>
             </div>
           </dl>
         </div>

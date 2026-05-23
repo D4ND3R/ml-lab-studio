@@ -36,7 +36,11 @@ export function SettingsPage({ device, onReconnect }: Props) {
         <h2>Python backend</h2>
         <div className="summary-grid single">
           <div>
-            <strong>Run command</strong>
+            <strong>Desktop startup</strong>
+            <span>The packaged app starts the bundled backend sidecar automatically.</span>
+          </div>
+          <div>
+            <strong>Developer command</strong>
             <code>npm run backend</code>
           </div>
           <div>

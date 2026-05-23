@@ -11,9 +11,16 @@ type Props = {
 };
 
 const plotTypes = ["scatter", "line", "bar", "histogram", "box", "heatmap", "correlation", "scatter3d", "surface"] as const;
+const explorerViews = [
+  { id: "raw", label: "Raw table" },
+  { id: "schema", label: "Schema" },
+  { id: "summary", label: "Summary" },
+  { id: "missing", label: "Missing" }
+] as const;
 
 export function DataExplorerPage({ dataset, onPlot }: Props) {
   const [plotType, setPlotType] = useState<(typeof plotTypes)[number]>("scatter");
+  const [view, setView] = useState<(typeof explorerViews)[number]["id"]>("raw");
   const [x, setX] = useState("");
   const [y, setY] = useState("");
   const [z, setZ] = useState("");
@@ -109,25 +116,69 @@ export function DataExplorerPage({ dataset, onPlot }: Props) {
       <section className="panel">
         <h2>Explorer views</h2>
         <div className="view-tabs">
-          <button>Raw table</button>
-          <button>Schema</button>
-          <button>Summary</button>
-          <button>Missing</button>
-          <button>PCA</button>
-          <button>Embeddings</button>
-          <button>Image browser</button>
+          {explorerViews.map((item) => (
+            <button key={item.id} className={view === item.id ? "selected" : ""} onClick={() => setView(item.id)}>
+              {item.label}
+            </button>
+          ))}
         </div>
         {dataset ? (
-          <div className="schema-list">
-            {dataset.stats.map((row, index) => (
-              <div key={index} className="schema-row">
-                <span>{String(row.column)}</span>
-                <small>mean {Number(row.mean ?? 0).toFixed(2)}</small>
+          <>
+            {view === "raw" ? (
+              <div className="grid-scroll slim">
+                <table className="dataset-table small-table">
+                  <thead>
+                    <tr>
+                      {columns.slice(0, 6).map((column) => (
+                        <th key={column}>{column}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dataset.preview.slice(0, 30).map((row, index) => (
+                      <tr key={index}>
+                        {columns.slice(0, 6).map((column) => (
+                          <td key={column}>{String(row[column] ?? "")}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            ))}
-          </div>
+            ) : null}
+            {view === "schema" ? (
+              <div className="schema-list">
+                {dataset.schema.map((column) => (
+                  <div key={column.name} className="schema-row">
+                    <span>{column.name}</span>
+                    <small>{column.semantic_type} / {column.dtype}</small>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            {view === "summary" ? (
+              <div className="schema-list">
+                {dataset.stats.map((row, index) => (
+                  <div key={index} className="schema-row">
+                    <span>{String(row.column)}</span>
+                    <small>mean {Number(row.mean ?? 0).toFixed(2)} / std {Number(row.std ?? 0).toFixed(2)}</small>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            {view === "missing" ? (
+              <div className="schema-list">
+                {dataset.missing.map((row) => (
+                  <div key={row.column} className="schema-row">
+                    <span>{row.column}</span>
+                    <small>{row.missing.toLocaleString()} missing / {row.percent}%</small>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </>
         ) : (
-          <p className="empty-note">Open a dataset to inspect schema, missing values, class balance, PCA, and embeddings.</p>
+          <p className="empty-note">Open a dataset to inspect rows, schema, summary statistics, missing values, and class balance.</p>
         )}
       </section>
 

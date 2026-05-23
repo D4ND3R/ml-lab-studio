@@ -62,6 +62,8 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [commandOpen, setCommandOpen] = useState(false);
+  const clientRef = useRef(client);
+  const backendOnlineRef = useRef<boolean | null>(null);
 
   const activeDataset = useMemo(() => datasets.find((dataset) => dataset.id === activeDatasetId) ?? datasets[0] ?? null, [activeDatasetId, datasets]);
   const assistantSuggestions = useMemo(
@@ -73,6 +75,10 @@ export default function App() {
     sessionIdRef.current = sessionId;
   }, [sessionId]);
 
+  useEffect(() => {
+    clientRef.current = client;
+  }, [client]);
+
   async function ensureSession(nextClient = client): Promise<string> {
     if (sessionIdRef.current) {
       return sessionIdRef.current;
@@ -83,24 +89,41 @@ export default function App() {
     return session.session_id;
   }
 
-  async function reconnect(nextClient = client) {
+  async function reconnect(nextClient = clientRef.current, options: { manual?: boolean } = {}) {
     try {
       const nextHealth = await nextClient.health();
       setHealth(nextHealth);
       setDevice(nextHealth.torch);
       await ensureSession(nextClient);
-      setNotice("Backend connected.");
+      if (backendOnlineRef.current !== true || options.manual) {
+        setNotice("Backend connected.");
+      }
+      backendOnlineRef.current = true;
     } catch (error) {
       setHealth(null);
       setDevice({ torch_available: false, devices: ["CPU"], active: "CPU", install_command: "pip install torch torchvision torchaudio" });
-      setNotice(error instanceof Error ? `Backend offline: ${error.message}` : "Backend offline.");
+      if (backendOnlineRef.current !== false || options.manual) {
+        const detail = error instanceof Error ? error.message : "The local backend did not answer.";
+        setNotice(`Backend offline: ${detail}`);
+      }
+      backendOnlineRef.current = false;
     }
   }
 
   useEffect(() => {
-    void reconnect();
-    const id = window.setInterval(() => void reconnect(), 15000);
-    return () => window.clearInterval(id);
+    let steadyPoll = 0;
+    const tick = () => void reconnect(clientRef.current);
+    tick();
+    const startupPoll = window.setInterval(tick, 3000);
+    const settle = window.setTimeout(() => {
+      window.clearInterval(startupPoll);
+      steadyPoll = window.setInterval(tick, 15000);
+    }, 30000);
+    return () => {
+      window.clearInterval(startupPoll);
+      window.clearInterval(steadyPoll);
+      window.clearTimeout(settle);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -334,6 +357,14 @@ export default function App() {
     });
   }
 
+  async function deleteModel(modelId: string) {
+    await withBusy(async () => {
+      await client.deleteModel(modelId);
+      setModels((current) => current.filter((model) => model.id !== modelId));
+      setNotice("Model card deleted.");
+    });
+  }
+
   async function refreshExperiments() {
     try {
       setRuns(await client.listExperiments());
@@ -357,10 +388,23 @@ export default function App() {
     });
   }
 
+  async function deleteRun(runId: string) {
+    await withBusy(async () => {
+      await client.deleteExperiment(runId);
+      setRuns((current) => current.filter((run) => run.run_id !== runId));
+      setNotice("Experiment run deleted.");
+    });
+  }
+
+  function exportExperimentReport() {
+    download("ml-lab-studio-experiments.json", JSON.stringify({ exportedAt: new Date().toISOString(), runs }, null, 2), "application/json");
+    setNotice("Experiment report exported.");
+  }
+
   function reconnectFromSettings() {
     const next = new BackendClient();
     setClient(next);
-    void reconnect(next);
+    void reconnect(next, { manual: true });
   }
 
   let page: JSX.Element;
@@ -418,9 +462,9 @@ export default function App() {
       />
     );
   } else if (activeSection === "models") {
-    page = <ModelsPage models={models} variables={variables} onRefresh={refreshModels} onSaveModel={saveModel} />;
+    page = <ModelsPage models={models} variables={variables} onRefresh={refreshModels} onSaveModel={saveModel} onDeleteModel={deleteModel} />;
   } else if (activeSection === "experiments") {
-    page = <ExperimentsPage runs={runs} onRefresh={() => void refreshExperiments()} onLogDemo={logCurrentRun} />;
+    page = <ExperimentsPage runs={runs} onRefresh={() => void refreshExperiments()} onLogDemo={logCurrentRun} onDelete={deleteRun} onExport={exportExperimentReport} />;
   } else {
     page = <SettingsPage device={device} onReconnect={reconnectFromSettings} />;
   }

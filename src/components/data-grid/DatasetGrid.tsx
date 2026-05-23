@@ -12,6 +12,7 @@ export function DatasetGrid({ dataset, onSave }: Props) {
   const [rows, setRows] = useState<Record<string, unknown>[]>(dataset.preview);
   const [columns, setColumns] = useState<string[]>(dataset.columns);
   const visibleRows = useMemo(() => rows.slice(0, 500), [rows]);
+  const isTruncated = dataset.rows > rows.length;
 
   function updateCell(rowIndex: number, column: string, value: string) {
     setRows((current) => current.map((row, index) => (index === rowIndex ? { ...row, [column]: value } : row)));
@@ -56,12 +57,17 @@ export function DatasetGrid({ dataset, onSave }: Props) {
           <Plus size={15} aria-hidden="true" />
           Column
         </button>
-        <button className="primary-button" onClick={() => onSave(rows)}>
+        <button className="primary-button" onClick={() => onSave(rows)} disabled={isTruncated}>
           <Save size={15} aria-hidden="true" />
           Save edits
         </button>
         <span className="muted">{dataset.rows.toLocaleString()} total rows, showing {visibleRows.length.toLocaleString()}</span>
       </div>
+      {isTruncated ? (
+        <div className="warning-banner">
+          Save is disabled because only the preview rows are loaded for this dataset. Export the dataset or use a smaller working slice before editing.
+        </div>
+      ) : null}
       <div className="grid-scroll">
         <table className="dataset-table">
           <thead>

@@ -6,9 +6,11 @@ type Props = {
   runs: ExperimentRun[];
   onRefresh: () => void;
   onLogDemo: () => void;
+  onDelete: (runId: string) => void;
+  onExport: () => void;
 };
 
-export function ExperimentsPage({ runs, onRefresh, onLogDemo }: Props) {
+export function ExperimentsPage({ runs, onRefresh, onLogDemo, onDelete, onExport }: Props) {
   return (
     <div className="page-grid">
       <section className="panel span-3">
@@ -20,7 +22,7 @@ export function ExperimentsPage({ runs, onRefresh, onLogDemo }: Props) {
               Refresh
             </button>
             <button onClick={onLogDemo}>Log current run</button>
-            <button>
+            <button onClick={onExport}>
               <FileDown size={15} aria-hidden="true" />
               Export report
             </button>
@@ -49,7 +51,7 @@ export function ExperimentsPage({ runs, onRefresh, onLogDemo }: Props) {
                   <td>{Object.entries(run.metrics).map(([key, value]) => `${key}: ${String(value)}`).join(", ")}</td>
                   <td>{run.device_used ?? "CPU"}</td>
                   <td>
-                    <button className="icon-button small" title="Delete run">
+                    <button className="icon-button small" title="Delete run" onClick={() => onDelete(run.run_id)}>
                       <Trash2 size={14} aria-hidden="true" />
                     </button>
                   </td>
